@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 05, 2026 at 06:22 AM
+-- Generation Time: Feb 25, 2026 at 07:53 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -24,73 +24,107 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `berita`
+-- Table structure for table `admin`
 --
 
-CREATE TABLE `berita` (
-  `id_berita` int(11) NOT NULL,
-  `judul` varchar(100) NOT NULL,
-  `isi` text NOT NULL,
-  `tgl_berita` date NOT NULL,
-  `gambar` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `galeri`
---
-
-CREATE TABLE `galeri` (
-  `id_galeri` int(11) NOT NULL,
-  `judul` varchar(100) NOT NULL,
-  `gambar` varchar(255) NOT NULL,
-  `tanggal` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `laporan_siswa`
---
-
-CREATE TABLE `laporan_siswa` (
-  `id_laporan` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `judul` varchar(100) NOT NULL,
-  `deskripsi` text NOT NULL,
-  `kategori` enum('Fasilitas','Guru','Kebersihan','Ekstrakurikuler','Lainnya') DEFAULT 'Lainnya',
-  `status` enum('diproses','selesai') DEFAULT 'diproses',
-  `tanggal` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tanggapan`
---
-
-CREATE TABLE `tanggapan` (
-  `id_tanggapan` int(11) NOT NULL,
-  `id_laporan` int(11) NOT NULL,
+CREATE TABLE `admin` (
   `id_admin` int(11) NOT NULL,
-  `tanggapan` text NOT NULL,
-  `tanggal_tanggapan` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id_user` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `nama_lengkap` varchar(100) NOT NULL,
-  `kelas` varchar(20) DEFAULT NULL,
-  `level` enum('siswa','admin') DEFAULT 'siswa'
+  `role` varchar(20) DEFAULT 'admin',
+  `foto` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id_admin`, `username`, `password`, `role`, `foto`) VALUES
+(1, 'admin', 'admin', 'admin', '1772044418_owi.png'),
+(2, 'ganung', '$2y$10$FfrcZ8kY1cBZaHQ9fFpH.uO5zV8imXHQabO/10nkLdFEw7H7LyFKK', 'petugas', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+CREATE TABLE `customer` (
+  `id_customer` int(11) NOT NULL,
+  `kode_customer` varchar(15) DEFAULT NULL,
+  `nama` varchar(100) DEFAULT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `no_hp` varchar(20) DEFAULT NULL,
+  `telp` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`id_customer`, `kode_customer`, `nama`, `username`, `password`, `email`, `no_hp`, `telp`) VALUES
+(1, 'C0001', 'ila', 'ila', '$2y$10$TROX7JKGocu6lIOoPxparO5HoscU3kwbcgEVf2uJ13OeGhlddfLN2', 'test@gmail.com', NULL, '0878864277200'),
+(2, 'C0002', 'jojo', 'jojo', '$2y$10$s9TXSmyHCRKnwUrkNuQVWOY8UNLKMRCZfwwBspjPiMfSNEQ7a1BXO', 'jojo@gmail.com', NULL, '098976765454');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `history_aspirasi`
+--
+
+CREATE TABLE `history_aspirasi` (
+  `id_history` int(11) NOT NULL,
+  `id_pengaduan` int(11) NOT NULL,
+  `feedback` text NOT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kontak`
+--
+
+CREATE TABLE `kontak` (
+  `id_kontak` int(11) NOT NULL,
+  `nama` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `no_hp` varchar(20) DEFAULT NULL,
+  `pesan` text DEFAULT NULL,
+  `tanggal` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `kontak`
+--
+
+INSERT INTO `kontak` (`id_kontak`, `nama`, `email`, `no_hp`, `pesan`, `tanggal`) VALUES
+(1, 'ganung', 'test@gmail.com', '', 'saya test 123', '2026-02-23 18:07:26');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pengaduan`
+--
+
+CREATE TABLE `pengaduan` (
+  `id_pengaduan` int(11) NOT NULL,
+  `judul` varchar(255) DEFAULT NULL,
+  `tanggal_kejadian` date DEFAULT NULL,
+  `kode_pengaduan` varchar(15) DEFAULT NULL,
+  `id_customer` int(11) DEFAULT NULL,
+  `isi_laporan` text DEFAULT NULL,
+  `tanggal` datetime DEFAULT current_timestamp(),
+  `status` enum('pending','proses','selesai') DEFAULT 'pending',
+  `klasifikasi` varchar(100) DEFAULT NULL,
+  `lokasi` varchar(255) DEFAULT NULL,
+  `instansi` varchar(255) DEFAULT NULL,
+  `anonim` enum('ya','tidak') DEFAULT 'tidak',
+  `lampiran` varchar(255) DEFAULT NULL,
+  `tgl_pengaduan` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -98,89 +132,80 @@ CREATE TABLE `users` (
 --
 
 --
--- Indexes for table `berita`
+-- Indexes for table `admin`
 --
-ALTER TABLE `berita`
-  ADD PRIMARY KEY (`id_berita`);
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id_admin`);
 
 --
--- Indexes for table `galeri`
+-- Indexes for table `customer`
 --
-ALTER TABLE `galeri`
-  ADD PRIMARY KEY (`id_galeri`);
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`id_customer`),
+  ADD UNIQUE KEY `kode_customer` (`kode_customer`);
 
 --
--- Indexes for table `laporan_siswa`
+-- Indexes for table `history_aspirasi`
 --
-ALTER TABLE `laporan_siswa`
-  ADD PRIMARY KEY (`id_laporan`),
-  ADD KEY `id_user` (`id_user`);
+ALTER TABLE `history_aspirasi`
+  ADD PRIMARY KEY (`id_history`),
+  ADD KEY `id_pengaduan` (`id_pengaduan`);
 
 --
--- Indexes for table `tanggapan`
+-- Indexes for table `kontak`
 --
-ALTER TABLE `tanggapan`
-  ADD PRIMARY KEY (`id_tanggapan`),
-  ADD KEY `id_laporan` (`id_laporan`),
-  ADD KEY `id_admin` (`id_admin`);
+ALTER TABLE `kontak`
+  ADD PRIMARY KEY (`id_kontak`);
 
 --
--- Indexes for table `users`
+-- Indexes for table `pengaduan`
 --
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id_user`),
-  ADD UNIQUE KEY `username` (`username`);
+ALTER TABLE `pengaduan`
+  ADD PRIMARY KEY (`id_pengaduan`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `berita`
+-- AUTO_INCREMENT for table `admin`
 --
-ALTER TABLE `berita`
-  MODIFY `id_berita` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `admin`
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `galeri`
+-- AUTO_INCREMENT for table `customer`
 --
-ALTER TABLE `galeri`
-  MODIFY `id_galeri` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `customer`
+  MODIFY `id_customer` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `laporan_siswa`
+-- AUTO_INCREMENT for table `history_aspirasi`
 --
-ALTER TABLE `laporan_siswa`
-  MODIFY `id_laporan` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `history_aspirasi`
+  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `tanggapan`
+-- AUTO_INCREMENT for table `kontak`
 --
-ALTER TABLE `tanggapan`
-  MODIFY `id_tanggapan` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `kontak`
+  MODIFY `id_kontak` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT for table `pengaduan`
 --
-ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `pengaduan`
+  MODIFY `id_pengaduan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `laporan_siswa`
+-- Constraints for table `history_aspirasi`
 --
-ALTER TABLE `laporan_siswa`
-  ADD CONSTRAINT `laporan_siswa_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE CASCADE;
-
---
--- Constraints for table `tanggapan`
---
-ALTER TABLE `tanggapan`
-  ADD CONSTRAINT `tanggapan_ibfk_1` FOREIGN KEY (`id_laporan`) REFERENCES `laporan_siswa` (`id_laporan`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tanggapan_ibfk_2` FOREIGN KEY (`id_admin`) REFERENCES `users` (`id_user`) ON DELETE CASCADE;
+ALTER TABLE `history_aspirasi`
+  ADD CONSTRAINT `history_aspirasi_ibfk_1` FOREIGN KEY (`id_pengaduan`) REFERENCES `pengaduan` (`id_pengaduan`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
