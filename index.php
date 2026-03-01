@@ -95,7 +95,7 @@ body {
     align-items:center;
     text-align:center;
     color:white;
-    background: url('image/footer/smk4.jpg') no-repeat center center;
+    background: url('image/footer/smk3.jpg') no-repeat center center;
     background-size:cover;
     animation: jumbotronZoom 1.5s ease forwards;
 }
